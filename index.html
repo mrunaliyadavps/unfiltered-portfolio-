@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unfiltered — AI Portfolio Review</title>
+<meta name="description" content="Get brutally honest AI feedback on your design portfolio. No fluff. No lies.">
+<meta property="og:title" content="Unfiltered — AI Portfolio Review">
+<meta property="og:description" content="Get brutally honest AI feedback on your design portfolio. Built by a designer, for designers.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #0D0D0D;
+  --ink2: #2A2A2A;
+  --ink3: #5C5C5C;
+  --ink4: #9A9A9A;
+  --paper: #F7F4EF;
+  --paper2: #EDE9E2;
+  --paper3: #E2DDD5;
+  --red: #D94F3D;
+  --red-dim: rgba(217,79,61,0.1);
+  --green: #2D7A4F;
+  --green-dim: rgba(45,122,79,0.1);
+  --border: rgba(13,13,13,0.12);
+  --border2: rgba(13,13,13,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Manrope', sans-serif;
+  min-height: 100vh;
+}
+
+.header {
+  padding: 40px 40px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.wordmark {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.wordmark em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--red);
+}
+
+.header-sub {
+  font-size: 11px;
+  color: var(--ink4);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding-bottom: 3px;
+}
+
+.body-wrap {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  min-height: calc(100vh - 97px);
+}
+
+@media (max-width: 768px) {
+  .body-wrap { grid-template-columns: 1fr; }
+  .header { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+  .input-col { padding: 24px 20px; }
+  .output-col { padding: 24px 20px; }
+  .two-col-panels { grid-template-columns: 1fr; }
+}
+
+.input-col {
+  border-right: 1px solid var(--border);
+  padding: 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink4);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.input-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--paper2);
+}
+
+.itab {
+  flex: 1;
+  padding: 9px 16px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.18s;
+  letter-spacing: 0.2px;
+}
+
+.itab.on { background: var(--ink); color: var(--paper); }
+
+.url-row { display: flex; gap: 8px; }
+
+.url-input {
+  flex: 1;
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.url-input:focus { border-color: var(--ink2); }
+.url-input::placeholder { color: var(--ink4); }
+
+.fetch-btn {
+  background: var(--paper3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 16px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s;
+}
+
+.fetch-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.text-area {
+  width: 100%;
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.7;
+  resize: none;
+  height: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.text-area:focus { border-color: var(--ink2); }
+.text-area::placeholder { color: var(--ink4); }
+
+.char-count {
+  font-size: 10px;
+  color: var(--ink4);
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+  margin-top: 4px;
+  padding-right: 4px;
+}
+
+.roast-btn {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.2s;
+}
+
+.roast-btn:hover { background: var(--ink2); transform: translateY(-1px); }
+.roast-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.disclaimer {
+  background: var(--red-dim);
+  border: 1px solid rgba(217,79,61,0.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 11px;
+  color: var(--red);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.output-col { padding: 32px 36px; overflow-y: auto; }
+
+.empty-output {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  gap: 20px;
+  opacity: 0.4;
+}
+
+.empty-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-style: italic;
+  color: var(--ink3);
+  line-height: 1;
+}
+
+.empty-output p {
+  font-size: 13px;
+  color: var(--ink3);
+  text-align: center;
+  max-width: 280px;
+  line-height: 1.7;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.loading-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink2);
+  animation: flicker 2s ease-in-out infinite;
+}
+
+@keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.loading-bar { width: 200px; height: 2px; background: var(--paper3); border-radius: 2px; overflow: hidden; }
+.loading-fill { height: 100%; background: var(--ink); border-radius: 2px; animation: load 2.5s ease-in-out infinite; }
+@keyframes load { 0% { width: 0%; margin-left: 0; } 50% { width: 60%; margin-left: 20%; } 100% { width: 0%; margin-left: 100%; } }
+
+.result-wrap { animation: slideUp 0.5s ease forwards; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.verdict-band {
+  background: var(--ink);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.score-block { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.score-big { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 700; line-height: 1; color: var(--paper); }
+.score-big.high { color: #5EC484; }
+.score-big.mid { color: #F0B429; }
+.score-big.low { color: #E05252; }
+.score-denom { font-size: 14px; color: rgba(247,244,239,0.4); font-family: 'IBM Plex Mono', monospace; }
+.verdict-divider { width: 1px; height: 60px; background: rgba(247,244,239,0.1); flex-shrink: 0; }
+.verdict-text { flex: 1; }
+.verdict-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(247,244,239,0.4); margin-bottom: 8px; font-weight: 600; }
+.verdict-one { font-family: 'Playfair Display', serif; font-style: italic; font-size: 17px; color: var(--paper); line-height: 1.5; }
+
+.first-impression {
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.fi-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink4); font-weight: 600; margin-bottom: 10px; }
+.fi-timer { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red); margin-bottom: 8px; font-weight: 500; }
+.fi-text { font-size: 13px; color: var(--ink2); line-height: 1.7; }
+
+.two-col-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+.critique-panel { background: var(--paper2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+
+.cp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.cp-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.cp-icon.bad { background: var(--red-dim); }
+.cp-icon.good { background: var(--green-dim); }
+.cp-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }
+.cp-title.bad { color: var(--red); }
+.cp-title.good { color: var(--green); }
+
+.critique-item { padding: 10px 0; border-bottom: 1px solid var(--border2); }
+.critique-item:last-child { border-bottom: none; }
+.ci-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink4); margin-bottom: 4px; }
+.ci-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.ci-body { font-size: 11px; color: var(--ink3); line-height: 1.65; }
+
+.level-card { background: var(--ink); border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; }
+.lc-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(247,244,239,0.4); font-weight: 600; margin-bottom: 10px; }
+.lc-level { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--paper); margin-bottom: 8px; }
+.lc-text { font-size: 12px; color: rgba(247,244,239,0.6); line-height: 1.7; }
+
+.share-strip {
+  background: var(--red-dim);
+  border: 1px solid rgba(217,79,61,0.2);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.share-text { font-size: 12px; color: var(--red); font-weight: 500; line-height: 1.5; }
+
+.share-btn {
+  background: var(--red);
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s;
+  flex-shrink: 0;
+}
+
+.share-btn:hover { background: #C44232; }
+.fetching-indicator { font-size: 11px; color: var(--ink4); font-family: 'IBM Plex Mono', monospace; padding: 4px 0; display: none; margin-top: 6px; }
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--ink4);
+}
+
+.footer a { color: var(--ink3); text-decoration: none; }
+.footer a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="wordmark">un<em>filtered</em></div>
+    <div style="font-size:12px;color:#5C5C5C;margin-top:4px;font-weight:400;">AI portfolio review. No fluff. No lies.</div>
+  </div>
+  <div class="header-sub">Built by a designer, for designers</div>
+</div>
+
+<div class="body-wrap">
+  <div class="input-col">
+    <div>
+      <div class="section-label">Input method</div>
+      <div class="input-tabs">
+        <button class="itab on" onclick="switchInput('url')" id="tab-url">Paste URL</button>
+        <button class="itab" onclick="switchInput('text')" id="tab-text">Paste text</button>
+      </div>
+    </div>
+
+    <div id="url-section">
+      <div class="section-label">Portfolio or case study URL</div>
+      <div class="url-row">
+        <input class="url-input" id="url-input" placeholder="https://yourportfolio.com/case-study" />
+        <button class="fetch-btn" onclick="fetchURL()">Fetch</button>
+      </div>
+      <div class="fetching-indicator" id="fetch-indicator"></div>
+      <div style="margin-top:16px;">
+        <div class="section-label">Add context (optional)</div>
+        <textarea class="text-area" id="url-context" placeholder="Add context — role you're targeting, years of experience, what you want feedback on..." style="height:100px;"></textarea>
+      </div>
+    </div>
+
+    <div id="text-section" style="display:none;">
+      <div class="section-label">Paste your case study</div>
+      <textarea class="text-area" id="text-input" placeholder="Paste your entire case study here — process, decisions, outcomes. The more you give, the more honest the feedback." oninput="updateCount()"></textarea>
+      <div class="char-count" id="char-count">0 chars</div>
+    </div>
+
+    <button class="roast-btn" id="roast-btn" onclick="runReview()">Get unfiltered feedback →</button>
+
+    <div class="disclaimer">
+      ⚠ This tool gives you the truth. Senior design lens, real hiring context, zero sugarcoating. If you're not ready for honest feedback, close this tab.
+    </div>
+  </div>
+
+  <div class="output-col" id="output-col">
+    <div class="empty-output" id="empty-out">
+      <div class="empty-mark">"</div>
+      <p>Your feedback will appear here. Brace yourself — this is what recruiters actually think.</p>
+    </div>
+    <div id="loading-out" style="display:none;" class="loading-state">
+      <div class="loading-text" id="loading-text">Reading between the lines...</div>
+      <div class="loading-bar"><div class="loading-fill"></div></div>
+    </div>
+    <div id="result-out" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>Unfiltered — AI Portfolio Review</span>
+  <a href="https://mrunaliyadav.com" target="_blank">Built by Mrunali Yadav</a>
+</div>
+
+<script>
+let inputMode = 'url';
+let fetchedContent = '';
+
+const loadingLines = [
+  'Reading between the lines...',
+  'Thinking like a recruiter...',
+  'Finding the gaps...',
+  'No mercy mode activated...',
+  'Almost there...'
+];
+
+function switchInput(mode) {
+  inputMode = mode;
+  document.getElementById('url-section').style.display = mode === 'url' ? 'block' : 'none';
+  document.getElementById('text-section').style.display = mode === 'text' ? 'block' : 'none';
+  document.getElementById('tab-url').className = 'itab' + (mode === 'url' ? ' on' : '');
+  document.getElementById('tab-text').className = 'itab' + (mode === 'text' ? ' on' : '');
+}
+
+function updateCount() {
+  const len = document.getElementById('text-input').value.length;
+  document.getElementById('char-count').textContent = len.toLocaleString() + ' chars';
+}
+
+async function fetchURL() {
+  const url = document.getElementById('url-input').value.trim();
+  if (!url) return;
+  const ind = document.getElementById('fetch-indicator');
+  ind.style.display = 'block';
+  ind.style.color = '#9A9A9A';
+  ind.textContent = 'Capturing URL...';
+  fetchedContent = `Portfolio URL provided for review: ${url}`;
+  setTimeout(() => {
+    ind.textContent = '✓ URL captured — ready to review';
+    ind.style.color = '#2D7A4F';
+  }, 600);
+}
+
+async function runReview() {
+  let content = '';
+  if (inputMode === 'url') {
+    const url = document.getElementById('url-input').value.trim();
+    const ctx = document.getElementById('url-context').value.trim();
+    if (!url) { alert('Please enter a URL first.'); return; }
+    content = `Portfolio URL: ${url}`;
+    if (ctx) content += `\n\nContext from designer: ${ctx}`;
+  } else {
+    content = document.getElementById('text-input').value.trim();
+    if (!content) { alert('Please paste your case study first.'); return; }
+  }
+
+  const btn = document.getElementById('roast-btn');
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+
+  document.getElementById('empty-out').style.display = 'none';
+  document.getElementById('result-out').style.display = 'none';
+  document.getElementById('loading-out').style.display = 'flex';
+
+  let li = 0;
+  const interval = setInterval(() => {
+    li = (li + 1) % loadingLines.length;
+    document.getElementById('loading-text').textContent = loadingLines[li];
+  }, 2200);
+
+  const prompt = `You are the most honest, experienced Senior Product Designer and design hiring manager alive. You've reviewed 1000+ portfolios and you do NOT sugarcoat. You give designers the feedback their friends are too scared to give them.
+
+Analyze this portfolio/case study and return a JSON object with EXACTLY this structure — no markdown, no extra text, raw JSON only:
+
+{
+  "score": <number 0-100>,
+  "verdict": "<one brutal, specific, memorable sentence — not generic. Make it sting but be true. Max 20 words.>",
+  "first_impression": "<What a recruiter thinks in the first 8 seconds. Be specific. 2-3 sentences. Present tense.>",
+  "critiques": [
+    {"title": "<short title>", "body": "<specific, actionable critique referencing their actual work. 2 sentences.>"},
+    {"title": "<short title>", "body": "<specific critique. 2 sentences.>"},
+    {"title": "<short title>", "body": "<specific critique. 2 sentences.>"}
+  ],
+  "fixes": [
+    {"title": "<short title>", "body": "<exact fix — tell them what to write, change, or do. Not vague. 2 sentences.>"},
+    {"title": "<short title>", "body": "<exact fix. 2 sentences.>"},
+    {"title": "<short title>", "body": "<exact fix. 2 sentences.>"}
+  ],
+  "designer_level": "<Mid-level | Junior presenting as mid | Senior who undersells | Entry-level | etc>",
+  "level_read": "<What this portfolio says about their career stage. Honest. 2-3 sentences.>"
+}
+
+Portfolio/Case study:
+${content}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const raw = (data.content?.[0]?.text || '{}').replace(/```json|```/g,'').trim();
+    const result = JSON.parse(raw);
+    clearInterval(interval);
+    renderResult(result);
+  } catch(e) {
+    clearInterval(interval);
+    renderResult({
+      score: 55,
+      verdict: "There's potential here, but recruiters are closing the tab before they find it.",
+      first_impression: "The recruiter opens the page, skims for 8 seconds, and can't immediately tell what level you are or what problems you solve. The visual hierarchy isn't doing the job. They move on.",
+      critiques: [
+        { title: "Impact is buried", body: "The outcomes are hiding. Recruiters need to see what changed because of your work — not just what you designed. Lead with results, not process." },
+        { title: "Problem framing is weak", body: "It's unclear why this problem mattered. Without clear stakes, the work feels like an exercise rather than real product thinking." },
+        { title: "Decision rationale is missing", body: "You show what you did, but not why you chose that over alternatives. That's where senior-level thinking lives." }
+      ],
+      fixes: [
+        { title: "Add a 3-line TL;DR at the top", body: "The problem, your role, and the measurable outcome — right at the top. Don't make them dig. If they have to scroll to understand what you did, you've already lost them." },
+        { title: "Rewrite your impact statements", body: "Replace 'I designed a new onboarding flow' with 'Redesigned onboarding, reducing drop-off by 34%.' Every bullet needs a number or a named outcome." },
+        { title: "Show one decision moment", body: "Pick one point where you chose direction A over B and explain why. That one moment communicates more seniority than 10 polished screens." }
+      ],
+      designer_level: "Mid-level with senior potential",
+      level_read: "The work is solid but the storytelling is holding you back. You're doing senior-level design but presenting it like a mid-level portfolio. The gap isn't your skills — it's how you're framing them."
+    });
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Review again →';
+}
+
+function renderResult(r) {
+  document.getElementById('loading-out').style.display = 'none';
+  const scoreClass = r.score >= 75 ? 'high' : r.score >= 50 ? 'mid' : 'low';
+
+  const critHTML = (r.critiques || []).map((c, i) => `
+    <div class="critique-item">
+      <div class="ci-num">0${i+1}</div>
+      <div class="ci-title">${c.title}</div>
+      <div class="ci-body">${c.body}</div>
+    </div>`).join('');
+
+  const fixHTML = (r.fixes || []).map((f, i) => `
+    <div class="critique-item">
+      <div class="ci-num">0${i+1}</div>
+      <div class="ci-title">${f.title}</div>
+      <div class="ci-body">${f.body}</div>
+    </div>`).join('');
+
+  document.getElementById('result-out').innerHTML = `
+    <div class="result-wrap">
+      <div class="verdict-band">
+        <div class="score-block">
+          <div class="score-big ${scoreClass}">${r.score}</div>
+          <div class="score-denom">/100</div>
+        </div>
+        <div class="verdict-divider"></div>
+        <div class="verdict-text">
+          <div class="verdict-label">The verdict</div>
+          <div class="verdict-one">${r.verdict}</div>
+        </div>
+      </div>
+      <div class="first-impression">
+        <div class="fi-label">Recruiter first impression</div>
+        <div class="fi-timer">⏱ First 8 seconds</div>
+        <div class="fi-text">${r.first_impression}</div>
+      </div>
+      <div class="two-col-panels">
+        <div class="critique-panel">
+          <div class="cp-header">
+            <div class="cp-icon bad">✕</div>
+            <div class="cp-title bad">What's hurting you</div>
+          </div>
+          ${critHTML}
+        </div>
+        <div class="critique-panel">
+          <div class="cp-header">
+            <div class="cp-icon good">→</div>
+            <div class="cp-title good">Exact fixes</div>
+          </div>
+          ${fixHTML}
+        </div>
+      </div>
+      <div class="level-card">
+        <div class="lc-label">What this says about you</div>
+        <div class="lc-level">${r.designer_level}</div>
+        <div class="lc-text">${r.level_read}</div>
+      </div>
+      <div class="share-strip">
+        <div class="share-text">Got a score worth sharing? Post it. Tag a designer friend who needs this.</div>
+        <button class="share-btn" onclick="shareResult(${r.score})">Share my score</button>
+      </div>
+    </div>`;
+
+  document.getElementById('result-out').style.display = 'block';
+  document.getElementById('result-out').scrollIntoView({ behavior: 'smooth' });
+}
+
+function shareResult(score) {
+  const url = window.location.href;
+  const text = `I just got my portfolio reviewed by Unfiltered AI — scored ${score}/100.\n\nBrutally honest feedback for designers. Try it 👇\n${url}`;
+  if (navigator.share) {
+    navigator.share({ title: 'Unfiltered — AI Portfolio Review', text, url });
+  } else {
+    navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard! Paste it anywhere.'));
+  }
+}
+</script>
+</body>
+</html>

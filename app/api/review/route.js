@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 
 export async function POST(req) {
-  const { content } = await req.json();
+  const { content, seniority, industry } = await req.json();
 
   if (!content) {
     return Response.json({ error: "No content provided" }, { status: 400 });
@@ -13,31 +13,47 @@ export async function POST(req) {
 
   const prompt = `You are the most honest, experienced Senior Product Designer and design hiring manager alive. You have reviewed 1000+ portfolios. You are brutal but fair — you give designers the feedback their friends are too scared to give, but you never punish someone for things that are not actually wrong.
 
-IMPORTANT RULES before scoring:
-- If the work is speculative or conceptual (a redesign, side project, self-initiated case study), judge it AS speculative work. Projected or estimated metrics in speculative work are completely standard and acceptable — do NOT penalize for this. Judge the thinking, research quality, and design decisions instead.
-- If the work is real (done at a company, for real users), hold it to a higher bar for measurable outcomes and real impact.
-- Never call something dishonest just because it is speculative. Half of great portfolios are speculative work.
-- Be specific — reference actual things from their case study, never give generic advice.
-- Feedback should sting where it needs to, but every critique must be accurate and genuinely actionable.
+The designer is targeting: ${seniority || "mid-level"} roles in the ${industry || "tech"} industry. Calibrate your scoring and feedback to this context.
 
-Analyze this portfolio/case study and return a JSON object with EXACTLY this structure — no markdown, no extra text, raw JSON only:
+IMPORTANT RULES:
+- Speculative/conceptual work with projected metrics is standard and acceptable — never penalize for this
+- Be specific — reference actual things from their case study, never give generic advice
+- Sub-scores must add up to exactly 100
+- Never use scores that are multiples of 5 or 10 — be precise (e.g. 67, 73, 81, 88)
+- hiring_confidence must be exactly one of: "WOULD SHORTLIST", "MAYBE", "WOULD PASS"
+- For rewrite_sentence: find the single weakest, most generic sentence in their case study and rewrite it to be specific, impact-driven, and senior-level
+- green_flags must highlight 2 things they are genuinely doing well — be specific
+- red_flags must be 3 specific, accurate critiques referencing their actual work
+- today_action must be ONE specific thing they can do in the next hour to improve this
+
+Return a JSON object with EXACTLY this structure — no markdown, no extra text, raw JSON only:
 
 {
-  "score": <number 0-100>,
-  "verdict": "<one honest, specific, memorable sentence. Name the biggest strength AND the biggest gap. Max 20 words.>",
-  "first_impression": "<What a recruiter thinks in the first 8 seconds. Specific to their actual work. 2-3 sentences. Present tense.>",
-  "critiques": [
-    {"title": "<short title>", "body": "<specific, accurate critique referencing their actual work. 2 sentences.>"},
+  "score": <number 0-100, never a multiple of 5 or 10>,
+  "verdict": "<one italic-worthy sentence. Name the biggest strength AND gap. Max 20 words. Make it memorable.>",
+  "summary": "<2-3 sentences expanding on the verdict. Specific to their work. Present tense.>",
+  "hiring_confidence": "<WOULD SHORTLIST | MAYBE | WOULD PASS>",
+  "sub_scores": {
+    "visual_craft": <number, never multiple of 5 or 10>,
+    "research_depth": <number, never multiple of 5 or 10>,
+    "storytelling": <number, never multiple of 5 or 10>,
+    "impact": <number, never multiple of 5 or 10>
+  },
+  "green_flags": [
+    {"title": "<short title>", "body": "<specific thing they are doing well. 1-2 sentences.>"},
+    {"title": "<short title>", "body": "<specific thing they are doing well. 1-2 sentences.>"}
+  ],
+  "red_flags": [
+    {"title": "<short title>", "body": "<specific critique referencing their actual work. 2 sentences.>"},
     {"title": "<short title>", "body": "<specific critique. 2 sentences.>"},
     {"title": "<short title>", "body": "<specific critique. 2 sentences.>"}
   ],
-  "fixes": [
-    {"title": "<short title>", "body": "<exact fix — tell them specifically what to write, change, or add. 2 sentences.>"},
-    {"title": "<short title>", "body": "<exact fix. 2 sentences.>"},
-    {"title": "<short title>", "body": "<exact fix. 2 sentences.>"}
-  ],
-  "designer_level": "<Mid-level | Junior presenting as mid | Senior who undersells | Entry-level | Strong mid-level | etc — be specific>",
-  "level_read": "<What this portfolio honestly says about their career stage. Fair and constructive. 2-3 sentences.>"
+  "rewrite": {
+    "original": "<exact weakest sentence copied from their case study>",
+    "improved": "<your rewrite — specific, impact-driven, senior-level>"
+  },
+  "today_action": "<ONE specific thing they can do in the next hour. Start with a verb. Be exact, not vague.>",
+  "today_action_label": "<3-4 word label for the action>"
 }
 
 Portfolio/Case study:
@@ -46,7 +62,7 @@ ${content}`;
   try {
     const message = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 1024,
+      max_tokens: 1500,
       messages: [{ role: "user", content: prompt }],
     });
 

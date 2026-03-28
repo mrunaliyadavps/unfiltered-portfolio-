@@ -2,12 +2,23 @@
 import { useState } from "react";
 
 const loadingLines = [
-  "Reading between the lines...",
+  "Reading your case study...",
   "Thinking like a recruiter...",
-  "Finding the gaps...",
-  "No mercy mode activated...",
+  "Checking research depth...",
+  "Evaluating storytelling...",
+  "Finding your weakest sentence...",
   "Almost there...",
 ];
+
+const industries = ["Tech", "Fintech", "Healthcare", "Consumer", "Enterprise", "Agency", "Other"];
+
+function genReportNum() {
+  return `#${Math.floor(1000 + Math.random() * 9000)}-${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
+}
+
+function todayDate() {
+  return new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
 
 export default function Home() {
   const [inputMode, setInputMode] = useState("url");
@@ -15,10 +26,13 @@ export default function Home() {
   const [urlContext, setUrlContext] = useState("");
   const [textValue, setTextValue] = useState("");
   const [fetchStatus, setFetchStatus] = useState("");
+  const [seniority, setSeniority] = useState("Mid-level");
+  const [industry, setIndustry] = useState("Tech");
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState(loadingLines[0]);
   const [result, setResult] = useState(null);
-  const [btnText, setBtnText] = useState("Get unfiltered feedback →");
+  const [reportNum] = useState(genReportNum());
+  const [btnText, setBtnText] = useState("Get unfiltered feedback");
 
   async function handleFetch() {
     if (!urlValue) return;
@@ -31,7 +45,7 @@ export default function Home() {
     if (inputMode === "url") {
       if (!urlValue) { alert("Please enter a URL first."); return; }
       content = `Portfolio URL: ${urlValue}`;
-      if (urlContext) content += `\n\nContext from designer: ${urlContext}`;
+      if (urlContext) content += `\n\nContext: ${urlContext}`;
     } else {
       content = textValue.trim();
       if (!content) { alert("Please paste your case study first."); return; }
@@ -45,26 +59,18 @@ export default function Home() {
     const interval = setInterval(() => {
       li = (li + 1) % loadingLines.length;
       setLoadingText(loadingLines[li]);
-    }, 2200);
+    }, 2000);
 
     try {
       const res = await fetch("/api/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ content, seniority, industry }),
       });
       const data = await res.json();
       setResult(data);
     } catch (e) {
-      setResult({
-        score: 50,
-        verdict: "Something went wrong — please try again.",
-        first_impression: "Unable to analyze at this time.",
-        critiques: [],
-        fixes: [],
-        designer_level: "Unknown",
-        level_read: "Please try again.",
-      });
+      console.error(e);
     }
 
     clearInterval(interval);
@@ -72,8 +78,13 @@ export default function Home() {
     setBtnText("Review again →");
   }
 
-  function shareResult(score) {
-    const text = `I just got my portfolio reviewed by Unfiltered AI — scored ${score}/100.\n\nBrutally honest feedback for designers. Try it 👇\n${window.location.href}`;
+  function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => alert("Link copied!"));
+  }
+
+  function shareScore() {
+    if (!result) return;
+    const text = `I just got my portfolio reviewed by Unfiltered AI — scored ${result.score}/100.\n\nBrutally honest feedback for designers. Try it 👇\n${window.location.href}`;
     if (navigator.share) {
       navigator.share({ title: "Unfiltered — AI Portfolio Review", text });
     } else {
@@ -82,13 +93,14 @@ export default function Home() {
   }
 
   const scoreClass = result ? (result.score >= 75 ? "high" : result.score >= 50 ? "mid" : "low") : "";
+  const hiringClass = result ? (result.hiring_confidence === "WOULD SHORTLIST" ? "shortlist" : result.hiring_confidence === "MAYBE" ? "maybe" : "pass") : "";
 
   return (
     <>
       <div className="header">
         <div>
-          <div className="wordmark">un<em>filtered</em></div>
-          <div style={{ fontSize: "12px", color: "#5C5C5C", marginTop: "4px", fontWeight: 400 }}>
+          <div className="wordmark"><em>Un</em>filtered</div>
+          <div style={{ fontSize: "11px", color: "#9A9A9A", marginTop: "3px", fontWeight: 400 }}>
             AI portfolio review. No fluff. No lies.
           </div>
         </div>
@@ -98,24 +110,39 @@ export default function Home() {
       <div className="body-wrap">
         <div className="input-col">
           <div>
-            <div className="section-label">Input method</div>
             <div className="input-tabs">
               <button className={`itab${inputMode === "url" ? " on" : ""}`} onClick={() => setInputMode("url")}>Paste URL</button>
               <button className={`itab${inputMode === "text" ? " on" : ""}`} onClick={() => setInputMode("text")}>Paste text</button>
             </div>
           </div>
 
+          <div>
+            <div className="section-label">Role seniority</div>
+            <div className="seniority-group">
+              {["Junior", "Mid-level", "Senior"].map(s => (
+                <button key={s} className={`sen-btn${seniority === s ? " on" : ""}`} onClick={() => setSeniority(s)}>{s}</button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="section-label">Focus industry</div>
+            <select className="industry-select" value={industry} onChange={e => setIndustry(e.target.value)}>
+              {industries.map(i => <option key={i}>{i}</option>)}
+            </select>
+          </div>
+
           {inputMode === "url" && (
             <div>
-              <div className="section-label">Portfolio or case study URL</div>
+              <div className="section-label">Paste case study URL</div>
               <div className="url-row">
                 <input className="url-input" value={urlValue} onChange={e => setUrlValue(e.target.value)} placeholder="https://yourportfolio.com/case-study" />
                 <button className="fetch-btn" onClick={handleFetch}>Fetch</button>
               </div>
-              {fetchStatus && <div className="fetching-indicator" style={{ color: fetchStatus.includes("✓") ? "#2D7A4F" : "#9A9A9A" }}>{fetchStatus}</div>}
-              <div style={{ marginTop: "16px" }}>
-                <div className="section-label">Add context (optional)</div>
-                <textarea className="text-area" style={{ height: "100px" }} value={urlContext} onChange={e => setUrlContext(e.target.value)} placeholder="Add context — role you're targeting, years of experience, what you want feedback on..." />
+              {fetchStatus && <div className="fetching-indicator" style={{ color: fetchStatus.includes("✓") ? "#2D6A4F" : "#9A9A9A" }}>{fetchStatus}</div>}
+              <div style={{ marginTop: "14px" }}>
+                <div className="section-label">Context or raw text (optional)</div>
+                <textarea className="text-area" style={{ height: "110px" }} value={urlContext} onChange={e => setUrlContext(e.target.value)} placeholder="Paste your problem statement or context here for a deeper review..." />
               </div>
             </div>
           )}
@@ -123,15 +150,18 @@ export default function Home() {
           {inputMode === "text" && (
             <div>
               <div className="section-label">Paste your case study</div>
-              <textarea className="text-area" value={textValue} onChange={e => setTextValue(e.target.value)} placeholder="Paste your entire case study here — process, decisions, outcomes. The more you give, the more honest the feedback." />
+              <textarea className="text-area" value={textValue} onChange={e => setTextValue(e.target.value)} placeholder="Paste your entire case study here — process, decisions, outcomes, anything you'd show a hiring manager." />
               <div className="char-count">{textValue.length.toLocaleString()} chars</div>
             </div>
           )}
 
-          <button className="roast-btn" disabled={loading} onClick={runReview}>{btnText}</button>
+          <button className="roast-btn" disabled={loading} onClick={runReview}>
+            <span>{btnText}</span>
+            <span>→</span>
+          </button>
 
           <div className="disclaimer">
-            ℹ This tool gives you the truth. Senior design lens, real hiring context, zero sugarcoating. If you&apos;re not ready for honest feedback, close this tab.
+            ℹ Reviews are powered by AI. No fluff. No lies. Just growth.
           </div>
         </div>
 
@@ -152,62 +182,112 @@ export default function Home() {
 
           {result && !loading && (
             <div className="result-wrap">
-              <div className="verdict-band">
-                <div className="score-block">
-                  <div className={`score-big ${scoreClass}`}>{result.score}</div>
-                  <div className="score-denom">/100</div>
+              <div className="report-header">
+                <div>
+                  <div className="report-num">REPORT {reportNum}</div>
                 </div>
-                <div className="verdict-divider" />
-                <div className="verdict-text">
-                  <div className="verdict-label">The verdict</div>
-                  <div className="verdict-one">{result.verdict}</div>
+                <div className="report-date">
+                  ANALYZED ON
+                  <span>{todayDate()}</span>
                 </div>
               </div>
 
-              <div className="first-impression">
-                <div className="fi-label">Recruiter first impression</div>
-                <div className="fi-timer">⏱ First 8 seconds</div>
-                <div className="fi-text">{result.first_impression}</div>
-              </div>
-
-              <div className="two-col-panels">
-                <div className="critique-panel">
-                  <div className="cp-header">
-                    <div className="cp-icon bad">✕</div>
-                    <div className="cp-title bad">What&apos;s hurting you</div>
+              <div className="verdict-section">
+                <div className="verdict-left">
+                  <div className="verdict-title">The Verdict.</div>
+                  <div className="score-display">
+                    <div className={`score-num ${scoreClass}`}>{result.score}</div>
+                    <div className="score-denom">/100</div>
                   </div>
-                  {(result.critiques || []).map((c, i) => (
-                    <div className="critique-item" key={i}>
-                      <div className="ci-num">0{i + 1}</div>
-                      <div className="ci-title">{c.title}</div>
-                      <div className="ci-body">{c.body}</div>
+                  <div className="verdict-quote">&ldquo;{result.verdict}&rdquo;</div>
+                  <div className="verdict-summary">{result.summary}</div>
+                </div>
+
+                <div className="verdict-right">
+                  <div>
+                    <div className="hiring-conf-label">Hiring confidence</div>
+                    <div className={`hiring-badge ${hiringClass}`}>{result.hiring_confidence}</div>
+                  </div>
+                  <div className="sub-scores">
+                    {result.sub_scores && Object.entries(result.sub_scores).map(([key, val]) => (
+                      <div className="sub-score-row" key={key}>
+                        <div className="sub-score-label">{key.replace("_", " ")}</div>
+                        <div className="sub-score-val">{val}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flags-section">
+                <div className="flags-col">
+                  <div className="flags-header">
+                    <div className="flags-dot green"></div>
+                    <div className="flags-title">Green flags</div>
+                  </div>
+                  {(result.green_flags || []).map((f, i) => (
+                    <div className="flag-item" key={i}>
+                      <div className="flag-icon g">✓</div>
+                      <div className="flag-body">
+                        <div className="flag-title">{f.title}</div>
+                        <div className="flag-desc">{f.body}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
-                <div className="critique-panel">
-                  <div className="cp-header">
-                    <div className="cp-icon good">→</div>
-                    <div className="cp-title good">Exact fixes</div>
+                <div className="flags-col">
+                  <div className="flags-header">
+                    <div className="flags-dot red"></div>
+                    <div className="flags-title">Red flags</div>
                   </div>
-                  {(result.fixes || []).map((f, i) => (
-                    <div className="critique-item" key={i}>
-                      <div className="ci-num">0{i + 1}</div>
-                      <div className="ci-title">{f.title}</div>
-                      <div className="ci-body">{f.body}</div>
+                  {(result.red_flags || []).map((f, i) => (
+                    <div className="flag-item" key={i}>
+                      <div className="flag-icon r">!</div>
+                      <div className="flag-body">
+                        <div className="flag-title">{f.title}</div>
+                        <div className="flag-desc">{f.body}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="level-card">
-                <div className="lc-label">What this says about you</div>
-                <div className="lc-level">{result.designer_level}</div>
-                <div className="lc-text">{result.level_read}</div>
+              {result.rewrite && (
+                <div className="rewrite-section">
+                  <div className="rewrite-label">Copy comparison — rewrite this sentence</div>
+                  <div className="rewrite-grid">
+                    <div className="rewrite-box original">
+                      <div className="rewrite-box-label">Your original</div>
+                      <div className="rewrite-text">&ldquo;{result.rewrite.original}&rdquo;</div>
+                    </div>
+                    <div className="rewrite-box improved">
+                      <div className="rewrite-box-label">Unfiltered suggestion</div>
+                      <div className="rewrite-text">&ldquo;{result.rewrite.improved}&rdquo;</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="today-section">
+                <div style={{ fontSize: "13px", color: "var(--ink3)", lineHeight: 1.7 }}>
+                  The single most impactful change you can make right now — not tomorrow, not after you redesign everything. Just this one thing.
+                </div>
+                <div className="today-card">
+                  <div className="today-label">Actionable takeaway</div>
+                  <div className="today-title">One thing to<br />do TODAY</div>
+                  <div className="today-action">{result.today_action}</div>
+                  {result.today_action_label && (
+                    <div className="today-action-label">{result.today_action_label} →</div>
+                  )}
+                </div>
               </div>
 
-              <div className="share-strip">
-                <div className="share-text">Got a score worth sharing? Post it. Tag a designer friend who needs this.</div>
-                <button className="share-btn" onClick={() => shareResult(result.score)}>Share my score</button>
+              <div className="bottom-bar">
+                <div className="bottom-left">Unfiltered — AI Portfolio Review</div>
+                <div className="bottom-btns">
+                  <button className="btn-outline" onClick={copyLink}>Copy link</button>
+                  <button className="btn-solid" onClick={shareScore}>Share score</button>
+                </div>
               </div>
             </div>
           )}
@@ -215,7 +295,7 @@ export default function Home() {
       </div>
 
       <div className="footer">
-        <span>Unfiltered — AI Portfolio Review</span>
+        <span>Unfiltered</span>
         <a href="https://mrunaliyadav.com" target="_blank" rel="noopener noreferrer">Built by Mrunali Yadav</a>
       </div>
     </>

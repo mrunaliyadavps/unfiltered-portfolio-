@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect, useRef, Suspense } from "react";
+import { useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { createBrowserClient } from "@supabase/ssr";
 import Nav from "../../components/Nav";
 import ScoreCard from "../../components/ScoreCard";
 
@@ -65,6 +66,31 @@ function AnalyzePage() {
       const data = await res.json();
       setResult(data);
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+
+      // Save to Supabase if user is signed in
+      try {
+        const supabase = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+        );
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from("scans").insert({
+            user_id: user.id,
+            score: data.score,
+            verdict: data.verdict,
+            summary: data.summary,
+            hiring_confidence: data.hiring_confidence,
+            sub_scores: data.sub_scores,
+            green_flags: data.green_flags,
+            red_flags: data.red_flags,
+            rewrite: data.rewrite,
+            today_action: data.today_action,
+          });
+        }
+      } catch (_) {
+        // Non-fatal: save failure shouldn't break the review
+      }
     } catch (e) {
       setError("Something went wrong. Please try again.");
     }

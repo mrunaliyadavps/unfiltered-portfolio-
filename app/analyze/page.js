@@ -117,7 +117,7 @@ function AnalyzePage() {
               fontFamily: "'SF Pro Display', -apple-system, sans-serif",
               fontSize: "clamp(22px, 3vw, 30px)",
               fontWeight: "400",
-              color: "#1A1A1A",
+              color: "var(--ink)",
               marginBottom: "8px",
               letterSpacing: "-0.3px",
             }}
@@ -127,7 +127,7 @@ function AnalyzePage() {
           <p
             style={{
               fontSize: "14px",
-              color: "#6B6B6B",
+              color: "var(--ink3)",
               marginBottom: "36px",
               fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
             }}
@@ -140,7 +140,7 @@ function AnalyzePage() {
             style={{
               display: "flex",
               gap: "0",
-              borderBottom: "1px solid rgba(26,26,26,0.10)",
+              borderBottom: "1px solid var(--border)",
               marginBottom: "28px",
             }}
           >
@@ -156,8 +156,8 @@ function AnalyzePage() {
                   fontSize: "13px",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   fontWeight: inputMode === mode ? "600" : "400",
-                  color: inputMode === mode ? "#1A1A1A" : "#6B6B6B",
-                  borderBottom: inputMode === mode ? "2px solid #A8C5DA" : "2px solid transparent",
+                  color: inputMode === mode ? "var(--ink)" : "var(--ink3)",
+                  borderBottom: inputMode === mode ? "2px solid var(--blue)" : "2px solid transparent",
                   marginBottom: "-1px",
                   transition: "all 0.2s",
                 }}
@@ -184,7 +184,7 @@ function AnalyzePage() {
                   fontSize: "10px",
                   letterSpacing: "1.5px",
                   textTransform: "uppercase",
-                  color: "#A0A0A0",
+                  color: "var(--ink4)",
                   fontWeight: "600",
                   marginBottom: "8px",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -200,12 +200,12 @@ function AnalyzePage() {
                     style={{
                       padding: "6px 12px",
                       border: "1px solid",
-                      borderColor: seniority === s ? "#A8C5DA" : "rgba(26,26,26,0.12)",
+                      borderColor: seniority === s ? "var(--blue)" : "var(--border)",
                       borderRadius: "999px",
-                      background: seniority === s ? "rgba(168,197,218,0.15)" : "transparent",
+                      background: seniority === s ? "var(--blue-dim)" : "transparent",
                       cursor: "pointer",
                       fontSize: "12px",
-                      color: seniority === s ? "#1A1A1A" : "#6B6B6B",
+                      color: seniority === s ? "var(--ink)" : "var(--ink3)",
                       fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                       transition: "all 0.15s",
                     }}
@@ -224,7 +224,7 @@ function AnalyzePage() {
                   fontSize: "10px",
                   letterSpacing: "1.5px",
                   textTransform: "uppercase",
-                  color: "#A0A0A0",
+                  color: "var(--ink4)",
                   fontWeight: "600",
                   marginBottom: "8px",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -240,11 +240,11 @@ function AnalyzePage() {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid rgba(26,26,26,0.12)",
+                  border: "1px solid var(--border)",
                   borderRadius: "8px",
                   background: "transparent",
                   fontSize: "13px",
-                  color: "#1A1A1A",
+                  color: "var(--ink)",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   outline: "none",
                 }}
@@ -259,7 +259,7 @@ function AnalyzePage() {
                   fontSize: "10px",
                   letterSpacing: "1.5px",
                   textTransform: "uppercase",
-                  color: "#A0A0A0",
+                  color: "var(--ink4)",
                   fontWeight: "600",
                   marginBottom: "8px",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -275,11 +275,11 @@ function AnalyzePage() {
                 style={{
                   width: "100%",
                   padding: "8px 12px",
-                  border: "1px solid rgba(26,26,26,0.12)",
+                  border: "1px solid var(--border)",
                   borderRadius: "8px",
                   background: "transparent",
                   fontSize: "13px",
-                  color: "#1A1A1A",
+                  color: "var(--ink)",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   outline: "none",
                 }}
@@ -296,7 +296,7 @@ function AnalyzePage() {
                   fontSize: "10px",
                   letterSpacing: "1.5px",
                   textTransform: "uppercase",
-                  color: "#A0A0A0",
+                  color: "var(--ink4)",
                   fontWeight: "600",
                   marginBottom: "8px",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -312,11 +312,11 @@ function AnalyzePage() {
                 style={{
                   width: "100%",
                   padding: "12px 16px",
-                  border: "1px solid rgba(26,26,26,0.12)",
+                  border: "1px solid var(--border)",
                   borderRadius: "10px",
-                  background: "rgba(255,255,255,0.6)",
+                  background: "var(--bg-card)",
                   fontSize: "14px",
-                  color: "#1A1A1A",
+                  color: "var(--ink)",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   outline: "none",
                 }}
@@ -333,7 +333,7 @@ function AnalyzePage() {
                   fontSize: "10px",
                   letterSpacing: "1.5px",
                   textTransform: "uppercase",
-                  color: "#A0A0A0",
+                  color: "var(--ink4)",
                   fontWeight: "600",
                   marginBottom: "8px",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -349,11 +349,11 @@ function AnalyzePage() {
                 style={{
                   width: "100%",
                   padding: "14px 16px",
-                  border: "1px solid rgba(26,26,26,0.12)",
+                  border: "1px solid var(--border)",
                   borderRadius: "10px",
-                  background: "rgba(255,255,255,0.6)",
+                  background: "var(--bg-card)",
                   fontSize: "14px",
-                  color: "#1A1A1A",
+                  color: "var(--ink)",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   outline: "none",
                   resize: "vertical",
@@ -363,7 +363,7 @@ function AnalyzePage() {
               <div
                 style={{
                   fontSize: "11px",
-                  color: "#A0A0A0",
+                  color: "var(--ink4)",
                   marginTop: "6px",
                   textAlign: "right",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -405,7 +405,7 @@ function AnalyzePage() {
           <p
             style={{
               fontSize: "12px",
-              color: "#A0A0A0",
+              color: "var(--ink4)",
               marginTop: "14px",
               fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
             }}
@@ -435,7 +435,7 @@ function AnalyzePage() {
             <p
               style={{
                 fontSize: "14px",
-                color: "#6B6B6B",
+                color: "var(--ink3)",
                 fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                 fontStyle: "italic",
               }}

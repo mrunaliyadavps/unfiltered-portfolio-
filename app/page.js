@@ -54,7 +54,7 @@ export default function Home() {
               fontWeight: "400",
               lineHeight: "1.18",
               letterSpacing: "-0.5px",
-              color: "#1A1A1A",
+              color: "var(--ink)",
               marginBottom: "20px",
             }}
           >
@@ -65,7 +65,7 @@ export default function Home() {
           <p
             style={{
               fontSize: "16px",
-              color: "#6B6B6B",
+              color: "var(--ink3)",
               lineHeight: "1.6",
               maxWidth: "480px",
               marginBottom: "52px",
@@ -85,7 +85,7 @@ export default function Home() {
               gap: "8px",
               fontFamily: "'SF Pro Display', -apple-system, sans-serif",
               fontSize: "clamp(18px, 2.5vw, 22px)",
-              color: "#1A1A1A",
+              color: "var(--ink)",
               fontWeight: "400",
               lineHeight: "1.8",
               marginBottom: "36px",
@@ -127,11 +127,11 @@ export default function Home() {
               style={{
                 width: "100%",
                 padding: "14px 18px",
-                border: "1px solid rgba(26,26,26,0.14)",
+                border: "1px solid var(--border)",
                 borderRadius: "10px",
-                background: "rgba(255,255,255,0.7)",
+                background: "var(--bg-card)",
                 fontSize: "15px",
-                color: "#1A1A1A",
+                color: "var(--ink)",
                 fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                 outline: "none",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
@@ -151,8 +151,8 @@ export default function Home() {
           {/* Example card */}
           <div
             style={{
-              background: "#fff",
-              border: "1px solid rgba(26,26,26,0.08)",
+              background: "var(--bg-card-solid)",
+              border: "1px solid var(--border-soft)",
               borderRadius: "14px",
               padding: "20px 24px",
               maxWidth: "540px",
@@ -164,7 +164,7 @@ export default function Home() {
               style={{
                 fontSize: "10px",
                 letterSpacing: "2px",
-                color: "#A0A0A0",
+                color: "var(--ink4)",
                 fontWeight: "600",
                 textTransform: "uppercase",
                 marginBottom: "12px",
@@ -177,7 +177,7 @@ export default function Home() {
               style={{
                 fontSize: "14px",
                 fontStyle: "italic",
-                color: "#3A3A3A",
+                color: "var(--ink2)",
                 lineHeight: "1.65",
                 fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
               }}
@@ -192,13 +192,14 @@ export default function Home() {
       {/* Footer */}
       <footer
         style={{
-          borderTop: "1px solid rgba(26,26,26,0.08)",
+          background: "var(--bg)",
+          borderTop: "1px solid var(--border-soft)",
           padding: "20px 32px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           fontSize: "12px",
-          color: "#A0A0A0",
+          color: "var(--ink4)",
           fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
         }}
       >
@@ -207,7 +208,7 @@ export default function Home() {
           href="https://mrunaliyadav.com"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: "#A0A0A0", textDecoration: "none" }}
+          style={{ color: "var(--ink4)", textDecoration: "none" }}
         >
           Built by Mrunali Yadav
         </a>

@@ -26,8 +26,8 @@ function todayDate() {
 function ScoreBar({ value, max }) {
   const pct = Math.min(100, (value / max) * 100);
   return (
-    <div style={{ flex: 1, height: "4px", background: "rgba(168,197,218,0.2)", borderRadius: "2px", overflow: "hidden" }}>
-      <div style={{ height: "100%", width: `${pct}%`, background: "#A8C5DA", borderRadius: "2px", transition: "width 1s ease-out" }} />
+    <div style={{ flex: 1, height: "4px", background: "var(--blue-dim)", borderRadius: "2px", overflow: "hidden" }}>
+      <div style={{ height: "100%", width: `${pct}%`, background: "var(--blue)", borderRadius: "2px", transition: "width 1s ease-out" }} />
     </div>
   );
 }
@@ -35,7 +35,7 @@ function ScoreBar({ value, max }) {
 function ChecklistItem({ item }) {
   const config = RESULT_CONFIG[item.result] ?? RESULT_CONFIG.fail;
   return (
-    <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", padding: "10px 0", borderBottom: "1px solid rgba(26,26,26,0.05)" }}>
+    <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", padding: "10px 0", borderBottom: "1px solid var(--border-soft)" }}>
       <div style={{
         width: "20px", height: "20px", borderRadius: "50%", background: config.bg,
         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px",
@@ -44,7 +44,7 @@ function ChecklistItem({ item }) {
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "8px", marginBottom: "3px" }}>
-          <span style={{ fontSize: "13px", fontWeight: "500", color: "#1A1A1A", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+          <span style={{ fontSize: "13px", fontWeight: "500", color: "var(--ink)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             {item.label}
           </span>
           <span style={{ fontSize: "10px", fontWeight: "600", letterSpacing: "0.5px", color: config.color, textTransform: "uppercase", flexShrink: 0, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
@@ -52,7 +52,7 @@ function ChecklistItem({ item }) {
           </span>
         </div>
         {item.note && (
-          <p style={{ fontSize: "12px", color: "#6B6B6B", lineHeight: "1.5", margin: 0, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+          <p style={{ fontSize: "12px", color: "var(--ink3)", lineHeight: "1.5", margin: 0, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             {item.note}
           </p>
         )}
@@ -68,17 +68,17 @@ function DimensionSection({ dimension, subScores, checklist }) {
   const partialCount = items.filter(i => i.result === "partial").length;
 
   return (
-    <div style={{ padding: "24px 28px", background: "rgba(255,255,255,0.55)", border: "1px solid rgba(26,26,26,0.08)", borderRadius: "14px" }}>
+    <div style={{ padding: "24px 28px", background: "var(--bg-card)", border: "1px solid var(--border-soft)", borderRadius: "14px" }}>
       {/* Dimension header */}
       <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "8px" }}>
-            <span style={{ fontSize: "14px", fontWeight: "600", color: "#1A1A1A", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+            <span style={{ fontSize: "14px", fontWeight: "600", color: "var(--ink)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
               {dimension.label}
             </span>
-            <span style={{ fontSize: "13px", color: "#1A1A1A", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+            <span style={{ fontSize: "13px", color: "var(--ink)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
               <strong>{score}</strong>
-              <span style={{ color: "#A0A0A0" }}> / {dimension.max}</span>
+              <span style={{ color: "var(--ink4)" }}> / {dimension.max}</span>
             </span>
           </div>
           <ScoreBar value={score} max={dimension.max} />
@@ -118,34 +118,34 @@ export default function ScoreCard({ result }) {
     <section className="fade-up" style={{ maxWidth: "720px", margin: "0 auto", padding: "0 24px 80px" }}>
 
       {/* Report header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(26,26,26,0.10)", padding: "28px 0 20px" }}>
-        <span style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "#A0A0A0", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--border)", padding: "28px 0 20px" }}>
+        <span style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", color: "var(--ink4)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
           Unfiltered Report
         </span>
-        <span style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#A0A0A0", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+        <span style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "var(--ink4)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
           {todayDate()}
         </span>
       </div>
 
       {/* Verdict card */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "28px", padding: "28px", background: "rgba(255,255,255,0.55)", border: "1px solid rgba(26,26,26,0.08)", borderRadius: "16px", marginBottom: "16px", alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "28px", padding: "28px", background: "var(--bg-card)", border: "1px solid var(--border-soft)", borderRadius: "16px", marginBottom: "16px", alignItems: "start" }}>
         <div>
-          <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: "13px", color: "#A0A0A0", marginBottom: "10px" }}>
+          <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: "13px", color: "var(--ink4)", marginBottom: "10px" }}>
             The Verdict.
           </div>
-          <blockquote style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: "clamp(18px, 2.2vw, 24px)", fontWeight: "400", color: "#1A1A1A", lineHeight: "1.35", fontStyle: "italic", marginBottom: "14px", letterSpacing: "-0.2px" }}>
+          <blockquote style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: "clamp(18px, 2.2vw, 24px)", fontWeight: "400", color: "var(--ink)", lineHeight: "1.35", fontStyle: "italic", marginBottom: "14px", letterSpacing: "-0.2px" }}>
             &ldquo;{result.verdict}&rdquo;
           </blockquote>
-          <p style={{ fontSize: "14px", color: "#3A3A3A", lineHeight: "1.65", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+          <p style={{ fontSize: "14px", color: "var(--ink2)", lineHeight: "1.65", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
             {result.summary}
           </p>
         </div>
 
         <div style={{ textAlign: "center", minWidth: "80px" }}>
-          <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: "52px", fontWeight: "300", lineHeight: "1", color: "#1A1A1A", letterSpacing: "-2px" }}>
+          <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: "52px", fontWeight: "300", lineHeight: "1", color: "var(--ink)", letterSpacing: "-2px" }}>
             {result.score}
           </div>
-          <div style={{ fontSize: "11px", color: "#A0A0A0", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>/ 100</div>
+          <div style={{ fontSize: "11px", color: "var(--ink4)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>/ 100</div>
           <div style={{ display: "inline-block", marginTop: "10px", padding: "4px 8px", background: hiringConfig.bg, borderRadius: "999px", fontSize: "9px", fontWeight: "700", letterSpacing: "0.5px", color: hiringConfig.color, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", textAlign: "center", lineHeight: "1.4" }}>
             {result.hiring_confidence}
           </div>
@@ -170,7 +170,7 @@ export default function ScoreCard({ result }) {
           { label: "Green flags", items: result.green_flags ?? [], color: "#2D6A4F", dot: "#2D6A4F" },
           { label: "Red flags",   items: result.red_flags   ?? [], color: "#C0392B", dot: "#C0392B" },
         ].map(col => (
-          <div key={col.label} style={{ padding: "22px", background: "rgba(255,255,255,0.55)", border: "1px solid rgba(26,26,26,0.08)", borderRadius: "14px" }}>
+          <div key={col.label} style={{ padding: "22px", background: "var(--bg-card)", border: "1px solid var(--border-soft)", borderRadius: "14px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "16px" }}>
               <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: col.dot }} />
               <span style={{ fontSize: "11px", fontWeight: "600", letterSpacing: "1px", textTransform: "uppercase", color: col.color, fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
@@ -180,8 +180,8 @@ export default function ScoreCard({ result }) {
             <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               {col.items.map((f, i) => (
                 <div key={i}>
-                  <div style={{ fontSize: "13px", fontWeight: "600", color: "#1A1A1A", marginBottom: "4px", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>{f.title}</div>
-                  <div style={{ fontSize: "13px", color: "#6B6B6B", lineHeight: "1.55", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>{f.body}</div>
+                  <div style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink)", marginBottom: "4px", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>{f.title}</div>
+                  <div style={{ fontSize: "13px", color: "var(--ink3)", lineHeight: "1.55", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>{f.body}</div>
                 </div>
               ))}
             </div>
@@ -191,8 +191,8 @@ export default function ScoreCard({ result }) {
 
       {/* Rewrite */}
       {result.rewrite && (
-        <div style={{ padding: "24px 28px", background: "rgba(255,255,255,0.55)", border: "1px solid rgba(26,26,26,0.08)", borderRadius: "14px", marginBottom: "16px" }}>
-          <div style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "#A0A0A0", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", fontWeight: "600", marginBottom: "20px" }}>
+        <div style={{ padding: "24px 28px", background: "var(--bg-card)", border: "1px solid var(--border-soft)", borderRadius: "14px", marginBottom: "16px" }}>
+          <div style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "var(--ink4)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", fontWeight: "600", marginBottom: "20px" }}>
             Rewrite this sentence
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
@@ -204,7 +204,7 @@ export default function ScoreCard({ result }) {
                 <div style={{ fontSize: "10px", letterSpacing: "1px", textTransform: "uppercase", color: col.color, fontWeight: "600", marginBottom: "10px", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                   {col.label}
                 </div>
-                <p style={{ fontSize: "13px", fontStyle: "italic", color: col.label === "Your original" ? "#6B6B6B" : "#1A1A1A", lineHeight: "1.6", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+                <p style={{ fontSize: "13px", fontStyle: "italic", color: col.label === "Your original" ? "var(--ink3)" : "var(--ink)", lineHeight: "1.6", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
                   &ldquo;{col.text}&rdquo;
                 </p>
               </div>
@@ -215,7 +215,7 @@ export default function ScoreCard({ result }) {
 
       {/* Today action */}
       {result.today_action && (
-        <div style={{ padding: "28px", background: "#A8C5DA", borderRadius: "14px", marginBottom: "28px" }}>
+        <div style={{ padding: "28px", background: "var(--blue)", borderRadius: "14px", marginBottom: "28px" }}>
           <div style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(26,26,26,0.5)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", fontWeight: "600", marginBottom: "8px" }}>
             One thing to do today
           </div>
@@ -231,8 +231,8 @@ export default function ScoreCard({ result }) {
       )}
 
       {/* Bottom bar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "20px", borderTop: "1px solid rgba(26,26,26,0.08)" }}>
-        <span style={{ fontSize: "12px", color: "#A0A0A0", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "20px", borderTop: "1px solid var(--border-soft)" }}>
+        <span style={{ fontSize: "12px", color: "var(--ink4)", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif" }}>
           Unfiltered — AI Portfolio Review
         </span>
         <button
@@ -243,7 +243,7 @@ export default function ScoreCard({ result }) {
               navigator.clipboard.writeText(window.location.href);
             }
           }}
-          style={{ padding: "8px 16px", border: "1px solid rgba(26,26,26,0.15)", borderRadius: "999px", background: "transparent", cursor: "pointer", fontSize: "12px", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "#3A3A3A" }}
+          style={{ padding: "8px 16px", border: "1px solid var(--border)", borderRadius: "999px", background: "transparent", cursor: "pointer", fontSize: "12px", fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif", color: "var(--ink2)" }}
         >
           Share score
         </button>

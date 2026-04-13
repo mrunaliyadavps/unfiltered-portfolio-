@@ -24,23 +24,58 @@
   font-style: normal;
 }
 
-/* ── Base ── */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ── Theme Tokens ── */
+:root {
+  --bg:          #F5F0E8;
+  --bg-card:     rgba(255, 255, 255, 0.65);
+  --bg-card-solid: #ffffff;
+  --ink:         #1A1A1A;
+  --ink2:        #3A3A3A;
+  --ink3:        #6B6B6B;
+  --ink4:        #A0A0A0;
+  --border:      rgba(26, 26, 26, 0.10);
+  --border-soft: rgba(26, 26, 26, 0.06);
+  --blue:        #A8C5DA;
+  --blue-hover:  #7AAEC8;
+  --blue-dim:    rgba(168, 197, 218, 0.15);
+  --nav-bg:      #F5F0E8;
+  --toggle-bg:   rgba(26, 26, 26, 0.07);
+  --toggle-icon: #3A3A3A;
 }
+
+[data-theme="dark"] {
+  --bg:          #111009;
+  --bg-card:     rgba(255, 255, 255, 0.04);
+  --bg-card-solid: #1C1A15;
+  --ink:         #EDE8DF;
+  --ink2:        #C8C2B8;
+  --ink3:        #7A7469;
+  --ink4:        #4E4A43;
+  --border:      rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --blue:        #A8C5DA;
+  --blue-hover:  #7AAEC8;
+  --blue-dim:    rgba(168, 197, 218, 0.10);
+  --nav-bg:      #111009;
+  --toggle-bg:   rgba(255, 255, 255, 0.08);
+  --toggle-icon: #C8C2B8;
+}
+
+/* ── Base ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body {
-  background-color: #F5F0E8;
-  color: #1A1A1A;
+  background-color: var(--bg);
+  color: var(--ink);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* ── Wordmark ── */
@@ -49,61 +84,17 @@ body {
   font-weight: 300;
   font-size: 22px;
   letter-spacing: -0.3px;
-  color: #1A1A1A;
+  color: var(--ink);
   line-height: 1;
   text-decoration: none;
+  transition: color 0.25s ease;
 }
 
-/* ── Inline dashed inputs (hero) ── */
-.inline-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1.5px dashed #A8C5DA;
-  outline: none;
-  font-family: "SF Pro Display", -apple-system, sans-serif;
-  font-size: inherit;
-  color: #1A1A1A;
-  padding: 0 2px 3px;
-  min-width: 140px;
-  text-align: center;
-  transition: border-color 0.2s;
-}
-
-.inline-input::placeholder {
-  color: #A0A0A0;
-}
-
-.inline-input:focus {
-  border-bottom-color: #7AAEC8;
-}
-
-/* ── CTA Button ── */
-.cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #A8C5DA;
-  color: #1A1A1A;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 14px 28px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  text-decoration: none;
-}
-
-.cta-btn:hover {
-  background-color: #7AAEC8;
-}
-
-/* ── Nav link underline ── */
+/* ── Nav ── */
 .nav-link {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  color: #3A3A3A;
+  color: var(--ink2);
   text-decoration: none;
   position: relative;
   transition: color 0.2s;
@@ -116,45 +107,103 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: #A8C5DA;
+  background: var(--blue);
   transform: scaleX(0);
   transition: transform 0.2s;
 }
 
 .nav-link:hover::after,
-.nav-link.active::after {
-  transform: scaleX(1);
+.nav-link.active::after { transform: scaleX(1); }
+
+.nav-link:hover { color: var(--ink); }
+
+/* ── Theme Toggle ── */
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--toggle-bg);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s;
+  color: var(--toggle-icon);
 }
 
-.nav-link:hover {
-  color: #1A1A1A;
+.theme-toggle:hover {
+  background: var(--blue-dim);
+  transform: scale(1.08);
 }
+
+.theme-toggle svg {
+  transition: transform 0.4s ease, opacity 0.2s ease;
+}
+
+/* ── Inline dashed inputs (hero) ── */
+.inline-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px dashed var(--blue);
+  outline: none;
+  font-family: "SF Pro Display", -apple-system, sans-serif;
+  font-size: inherit;
+  color: var(--ink);
+  padding: 0 2px 3px;
+  min-width: 140px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.inline-input::placeholder { color: var(--ink4); }
+.inline-input:focus { border-bottom-color: var(--blue-hover); }
+
+/* ── CTA Button ── */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--blue);
+  color: #1A1A1A;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.cta-btn:hover { background-color: var(--blue-hover); }
 
 /* ── Score bar ── */
 .score-bar-track {
   height: 4px;
-  background: rgba(168, 197, 218, 0.2);
+  background: var(--blue-dim);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .score-bar-fill {
   height: 100%;
-  background: #A8C5DA;
+  background: var(--blue);
   border-radius: 2px;
   transition: width 1s ease-out;
 }
 
-/* ── Loading animation ── */
+/* ── Loading dots ── */
 @keyframes pulse-dot {
   0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-  40% { opacity: 1; transform: scale(1); }
+  40%           { opacity: 1;   transform: scale(1);   }
 }
 
 .loading-dot {
   width: 6px;
   height: 6px;
-  background: #A8C5DA;
+  background: var(--blue);
   border-radius: 50%;
   animation: pulse-dot 1.4s ease-in-out infinite;
 }
@@ -165,9 +214,14 @@ body {
 /* ── Result fade-in ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
-.fade-up {
-  animation: fadeUp 0.4s ease-out forwards;
+.fade-up { animation: fadeUp 0.4s ease-out forwards; }
+
+/* ── Dark mode card/input overrides ── */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  color-scheme: dark;
 }

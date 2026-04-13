@@ -68,7 +68,7 @@ export default function MyScans() {
             fontFamily: "'SF Pro Display', -apple-system, sans-serif",
             fontSize: "clamp(24px, 3vw, 36px)",
             fontWeight: "400",
-            color: "#1A1A1A",
+            color: "var(--ink)",
             marginBottom: "8px",
             letterSpacing: "-0.3px",
           }}
@@ -78,7 +78,7 @@ export default function MyScans() {
         <p
           style={{
             fontSize: "14px",
-            color: "#6B6B6B",
+            color: "var(--ink3)",
             marginBottom: "40px",
             fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           }}
@@ -96,8 +96,8 @@ export default function MyScans() {
           <div
             style={{
               padding: "40px",
-              background: "rgba(255,255,255,0.55)",
-              border: "1px solid rgba(26,26,26,0.08)",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-soft)",
               borderRadius: "16px",
               textAlign: "center",
             }}
@@ -105,7 +105,7 @@ export default function MyScans() {
             <p
               style={{
                 fontSize: "15px",
-                color: "#3A3A3A",
+                color: "var(--ink2)",
                 marginBottom: "20px",
                 fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
               }}
@@ -120,8 +120,8 @@ export default function MyScans() {
           <div
             style={{
               padding: "40px",
-              background: "rgba(255,255,255,0.55)",
-              border: "1px solid rgba(26,26,26,0.08)",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-soft)",
               borderRadius: "16px",
               textAlign: "center",
             }}
@@ -129,7 +129,7 @@ export default function MyScans() {
             <p
               style={{
                 fontSize: "15px",
-                color: "#6B6B6B",
+                color: "var(--ink3)",
                 marginBottom: "20px",
                 fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
               }}
@@ -151,8 +151,8 @@ export default function MyScans() {
                 key={scan.id}
                 style={{
                   padding: "22px 24px",
-                  background: "rgba(255,255,255,0.55)",
-                  border: "1px solid rgba(26,26,26,0.08)",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border-soft)",
                   borderRadius: "14px",
                   display: "flex",
                   justifyContent: "space-between",
@@ -165,7 +165,7 @@ export default function MyScans() {
                     style={{
                       fontSize: "13px",
                       fontStyle: "italic",
-                      color: "#1A1A1A",
+                      color: "var(--ink)",
                       marginBottom: "6px",
                       fontFamily: "'SF Pro Display', -apple-system, sans-serif",
                     }}
@@ -175,7 +175,7 @@ export default function MyScans() {
                   <div
                     style={{
                       fontSize: "11px",
-                      color: "#A0A0A0",
+                      color: "var(--ink4)",
                       fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                     }}
                   >
@@ -189,7 +189,7 @@ export default function MyScans() {
                       fontSize: "32px",
                       fontWeight: "300",
                       lineHeight: "1",
-                      color: "#1A1A1A",
+                      color: "var(--ink)",
                     }}
                   >
                     {scan.score}
@@ -197,7 +197,7 @@ export default function MyScans() {
                   <div
                     style={{
                       fontSize: "10px",
-                      color: HIRING_COLOR[scan.hiring_confidence] ?? "#A0A0A0",
+                      color: HIRING_COLOR[scan.hiring_confidence] ?? "var(--ink4)",
                       fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                       fontWeight: "600",
                       marginTop: "4px",

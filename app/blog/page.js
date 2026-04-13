@@ -45,7 +45,7 @@ export default function Blog() {
             fontFamily: "'SF Pro Display', -apple-system, sans-serif",
             fontSize: "clamp(24px, 3vw, 36px)",
             fontWeight: "400",
-            color: "#1A1A1A",
+            color: "var(--ink)",
             marginBottom: "8px",
             letterSpacing: "-0.3px",
           }}
@@ -55,7 +55,7 @@ export default function Blog() {
         <p
           style={{
             fontSize: "14px",
-            color: "#6B6B6B",
+            color: "var(--ink3)",
             marginBottom: "48px",
             fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           }}
@@ -69,8 +69,8 @@ export default function Blog() {
               key={post.slug}
               style={{
                 padding: "32px 0",
-                borderTop: i === 0 ? "1px solid rgba(26,26,26,0.10)" : undefined,
-                borderBottom: "1px solid rgba(26,26,26,0.10)",
+                borderTop: i === 0 ? "1px solid var(--border)" : undefined,
+                borderBottom: "1px solid var(--border)",
               }}
             >
               <div
@@ -86,7 +86,7 @@ export default function Blog() {
                     fontSize: "10px",
                     letterSpacing: "1.5px",
                     textTransform: "uppercase",
-                    color: "#A8C5DA",
+                    color: "var(--blue)",
                     fontWeight: "600",
                     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   }}
@@ -96,7 +96,7 @@ export default function Blog() {
                 <span
                   style={{
                     fontSize: "11px",
-                    color: "#A0A0A0",
+                    color: "var(--ink4)",
                     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   }}
                 >
@@ -108,7 +108,7 @@ export default function Blog() {
                   fontFamily: "'SF Pro Display', -apple-system, sans-serif",
                   fontSize: "clamp(18px, 2vw, 22px)",
                   fontWeight: "400",
-                  color: "#1A1A1A",
+                  color: "var(--ink)",
                   lineHeight: "1.35",
                   letterSpacing: "-0.2px",
                   marginBottom: "12px",
@@ -120,7 +120,7 @@ export default function Blog() {
               <p
                 style={{
                   fontSize: "14px",
-                  color: "#6B6B6B",
+                  color: "var(--ink3)",
                   lineHeight: "1.65",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   marginBottom: "16px",
@@ -131,7 +131,7 @@ export default function Blog() {
               <span
                 style={{
                   fontSize: "12px",
-                  color: "#A8C5DA",
+                  color: "var(--blue)",
                   fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                   fontWeight: "500",
                   cursor: "pointer",
